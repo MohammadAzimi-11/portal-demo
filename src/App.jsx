@@ -1,12 +1,12 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router'
+import { HashRouter } from 'react-router'
 import PortalRoutes from './features/router/PortalRoutes'
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <PortalRoutes />
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 

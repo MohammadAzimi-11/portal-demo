@@ -1,8 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // api.js — Shared Axios Instance
 //
-// All requests go through this instance. Base URL is read from the Vite env
-// variable VITE_API_URL (falls back to http://localhost:8000 for local dev).
+// All requests go through this instance. Without VITE_API_URL it uses the
+// local demo adapter, so public demo builds do not call a backend.
 //
 // Usage:
 //   import api from '@/lib/api'
@@ -10,11 +10,13 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import axios from 'axios'
+import { demoAdapter, isDemoApiEnabled } from './demoApi'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_URL ?? '/',
   headers: { 'Content-Type': 'application/json' },
   timeout: 15_000,
+  adapter: isDemoApiEnabled() ? demoAdapter : undefined,
 })
 
 // ── Request interceptor — attach auth token when present ─────────────────────

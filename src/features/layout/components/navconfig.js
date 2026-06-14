@@ -2,20 +2,14 @@ import {
   LayoutDashboard,
   BookOpen,
   RefreshCcw,
-  Users,
   CalendarDays,
-  UserCheck,
-  ClipboardList,
-  BarChart2,
   Award,
   GraduationCap,
   Briefcase,
-  UserCog,
   ShieldCheck,
   FileText,
   Bell,
   Settings,
-  HelpCircle,
 } from 'lucide-react'
 
 /**
@@ -46,9 +40,6 @@ export const navConfig = [
     group: 'Students',
     items: [
       { label: 'Students',    path: '/students',    icon: GraduationCap },
-      { label: 'Attendance',  path: '/attendance',  icon: UserCheck },
-      { label: 'Scores',      path: '/scores',      icon: BarChart2 },
-      { label: 'Exams',       path: '/exams',       icon: ClipboardList },
       { label: 'Certificates',path: '/certificates',icon: Award },
     ],
   },
@@ -56,8 +47,6 @@ export const navConfig = [
     group: 'HR',
     items: [
       { label: 'Employees',   path: '/employees',   icon: Briefcase },
-      { label: 'Roles',       path: '/roles',       icon: UserCog },
-      { label: 'Permissions', path: '/permissions', icon: ShieldCheck },
     ],
   },
   {

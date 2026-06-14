@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import { cn, timeAgo, formatDate } from '../../utils/utils'
 import { useThemeStore } from '../shared/store/useThemeStore'
+import api from '../../utils/api'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -432,9 +433,10 @@ export default function AnnouncementsPage() {
     else         setRefreshing(true)
     setError(null)
     try {
-      const res  = await fetch('/api/announcements?orderBy=created_at:desc&pageSize=200')
-      const json = await res.json()
-      setAnnouncements(Array.isArray(json.data) ? json.data : [])
+      const res = await api.get('/api/announcements', {
+        params: { orderBy: 'created_at:desc', pageSize: 200 },
+      })
+      setAnnouncements(Array.isArray(res.data?.data) ? res.data.data : [])
     } catch (err) {
       setError('Failed to load announcements. Please try again.')
     } finally {
