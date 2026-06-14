@@ -143,7 +143,7 @@ function Tab({ label, icon: Icon, active, disabled, disabledReason, onClick, isD
       title={disabled ? disabledReason : undefined}
       aria-disabled={disabled}
       className={cn(
-        'relative flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-t-md',
+        'relative flex shrink-0 items-center gap-2 px-3 py-2 text-sm font-semibold rounded-t-md sm:px-4 sm:py-2.5',
         'transition-all duration-200 select-none whitespace-nowrap',
         disabled
           ? 'cursor-not-allowed opacity-40'
@@ -230,7 +230,7 @@ export default function MasterComponent({ config, isDark, title, subtitle }) {
     <div className="space-y-0 animate-scale-in">
       {/* ── Page header ───────────────────────────────────────────────── */}
       {(title || subtitle) && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           {title && (
             <h2 className={cn(
               'text-2xl font-extrabold tracking-tight',
@@ -240,17 +240,17 @@ export default function MasterComponent({ config, isDark, title, subtitle }) {
             </h2>
           )}
           {subtitle && (
-            <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
+            <p className="text-sm text-muted-foreground mt-1 max-w-3xl">{subtitle}</p>
           )}
         </div>
       )}
 
       {/* ── Tab bar ───────────────────────────────────────────────────── */}
       <div className={cn(
-        'flex items-end gap-1 px-4 border-b',
+        'flex flex-col gap-2 px-3 pt-2 border-b sm:flex-row sm:items-end sm:px-4 sm:pt-0',
         isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border'
       )}>
-        <div className="flex items-end gap-1 flex-1">
+        <div className="flex w-full gap-1 overflow-x-auto sm:flex-1 sm:items-end">
           <Tab
             label="List"
             icon={List}
@@ -285,7 +285,7 @@ export default function MasterComponent({ config, isDark, title, subtitle }) {
         {/* Record context badge in edit tab */}
         {tab === 'edit' && editRecord && (
           <div className={cn(
-            'mb-0.5 flex items-center gap-2 px-3 py-1.5 rounded-t-md text-xs font-medium',
+            'mb-2 flex max-w-full items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium sm:mb-0.5 sm:rounded-t-md',
             isDark ? 'bg-primary/10 text-primary-300' : 'bg-primary-50 text-primary-700'
           )}>
             <span className="opacity-60">Editing:</span>
@@ -302,7 +302,7 @@ export default function MasterComponent({ config, isDark, title, subtitle }) {
 
       {/* ── Tab content ───────────────────────────────────────────────── */}
       <div className={cn(
-        'rounded-b-lg border border-t-0 p-6',
+        'rounded-b-lg border border-t-0 p-3 sm:p-4 lg:p-6',
         isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border'
       )}>
         {tab === 'list' && (

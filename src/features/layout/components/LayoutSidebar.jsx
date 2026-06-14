@@ -8,7 +8,7 @@ import { cn } from '../../../utils/utils'
 // ─────────────────────────────────────────────────────────────────────────────
 // NavItem — single link row (shared between full sidebar and flyout)
 // ─────────────────────────────────────────────────────────────────────────────
-function NavItem({ item, collapsed, isDark, inFlyout = false }) {
+function NavItem({ item, collapsed, isDark, inFlyout = false, onNavigate }) {
   const location = useLocation()
   const Icon = item.icon
   const isActive =
@@ -20,6 +20,7 @@ function NavItem({ item, collapsed, isDark, inFlyout = false }) {
     <NavLink
       to={item.path}
       title={collapsed && !inFlyout ? item.label : undefined}
+      onClick={onNavigate}
       className={cn(
         'group flex items-start gap-3 rounded-md cursor-pointer select-none text-left',
         'transition-all duration-200 relative',
@@ -76,7 +77,7 @@ function NavItem({ item, collapsed, isDark, inFlyout = false }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // FlyoutPopover — appears on hover over a group in collapsed rail mode
 // ─────────────────────────────────────────────────────────────────────────────
-function FlyoutPopover({ section, isDark, top, onMouseEnter, onMouseLeave }) {
+function FlyoutPopover({ section, isDark, top, onMouseEnter, onMouseLeave, onNavigate }) {
   const menu = (
     <div
       onMouseEnter={onMouseEnter}
@@ -101,7 +102,7 @@ function FlyoutPopover({ section, isDark, top, onMouseEnter, onMouseLeave }) {
       )}
       <div className="py-1 px-1.5">
         {section.items.map((item) => (
-          <NavItem key={item.path} item={item} collapsed={false} isDark={isDark} inFlyout />
+          <NavItem key={item.path} item={item} collapsed={false} isDark={isDark} inFlyout onNavigate={onNavigate} />
         ))}
       </div>
     </div>
@@ -113,7 +114,7 @@ function FlyoutPopover({ section, isDark, top, onMouseEnter, onMouseLeave }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // CollapsibleGroup — accordion group in full sidebar mode
 // ─────────────────────────────────────────────────────────────────────────────
-function CollapsibleGroup({ section, isDark }) {
+function CollapsibleGroup({ section, isDark, onNavigate }) {
   const location = useLocation()
 
   const hasActive = section.items.some((item) =>
@@ -173,7 +174,7 @@ function CollapsibleGroup({ section, isDark }) {
       >
         <div className="space-y-0.5 pb-1">
           {section.items.map((item) => (
-            <NavItem key={item.path} item={item} collapsed={false} isDark={isDark} />
+            <NavItem key={item.path} item={item} collapsed={false} isDark={isDark} onNavigate={onNavigate} />
           ))}
         </div>
       </div>
@@ -184,7 +185,7 @@ function CollapsibleGroup({ section, isDark }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // RailGroup — icon cluster for a group in collapsed rail (with hover flyout)
 // ─────────────────────────────────────────────────────────────────────────────
-function RailGroup({ section, isDark, isFirst }) {
+function RailGroup({ section, isDark, isFirst, onNavigate }) {
   const [flyoutOpen, setFlyoutOpen] = useState(false)
   const [flyoutTop, setFlyoutTop]   = useState(0)
   const groupRef     = useRef(null)
@@ -221,7 +222,7 @@ function RailGroup({ section, isDark, isFirst }) {
         className="space-y-0.5"
       >
         {section.items.map((item) => (
-          <NavItem key={item.path} item={item} collapsed isDark={isDark} />
+          <NavItem key={item.path} item={item} collapsed isDark={isDark} onNavigate={onNavigate} />
         ))}
       </div>
 
@@ -232,6 +233,7 @@ function RailGroup({ section, isDark, isFirst }) {
           top={flyoutTop}
           onMouseEnter={() => clearTimeout(closeTimeout.current)}
           onMouseLeave={closeFlyout}
+          onNavigate={onNavigate}
         />
       )}
     </div>
@@ -241,19 +243,31 @@ function RailGroup({ section, isDark, isFirst }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // LayoutSidebar — main export
 // ─────────────────────────────────────────────────────────────────────────────
-export default function LayoutSidebar({ collapsed, isDark }) {
+export default function LayoutSidebar({ collapsed, isDark, mobileOpen = false, onClose, onNavigate }) {
   const ungrouped = navConfig.filter((s) => s.group === null)
   const grouped   = navConfig.filter((s) => s.group !== null)
+  const compact = collapsed && !mobileOpen
 
   return (
-    <aside
-      className={cn(
-        'fixed top-0 left-0 h-screen z-sidebar flex flex-col transition-all duration-300',
-        'border-r',
-        isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border',
-        collapsed ? 'w-16' : 'w-[240px]'
+    <>
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          onClick={onClose}
+          className="fixed inset-0 z-[90] bg-black/40 lg:hidden"
+        />
       )}
-    >
+
+      <aside
+        className={cn(
+          'fixed top-0 left-0 h-screen z-[110] flex flex-col transition-all duration-300',
+          'w-[240px] border-r lg:translate-x-0',
+          isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full',
+          collapsed ? 'lg:w-16' : 'lg:w-[240px]'
+        )}
+      >
       {/* ── Logo / Brand ──────────────────────────────────────────────────── */}
       <div
         className={cn(
@@ -268,7 +282,7 @@ export default function LayoutSidebar({ collapsed, isDark }) {
         <div
           className={cn(
             'ml-3 overflow-hidden transition-all duration-300',
-            collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+            compact ? 'w-0 opacity-0' : 'w-auto opacity-100'
           )}
         >
           <p
@@ -291,18 +305,19 @@ export default function LayoutSidebar({ collapsed, isDark }) {
         {/* Ungrouped items (e.g. Dashboard) — always flat, never collapsible */}
         {ungrouped.map((section) =>
           section.items.map((item) => (
-            <NavItem key={item.path} item={item} collapsed={collapsed} isDark={isDark} />
+            <NavItem key={item.path} item={item} collapsed={compact} isDark={isDark} onNavigate={onNavigate} />
           ))
         )}
 
         {/* Grouped sections */}
-        {collapsed
+        {compact
           ? grouped.map((section, i) => (
               <RailGroup
                 key={section.group}
                 section={section}
                 isDark={isDark}
                 isFirst={i === 0}
+                onNavigate={onNavigate}
               />
             ))
           : grouped.map((section) => (
@@ -310,6 +325,7 @@ export default function LayoutSidebar({ collapsed, isDark }) {
                 key={section.group}
                 section={section}
                 isDark={isDark}
+                onNavigate={onNavigate}
               />
             ))
         }
@@ -322,6 +338,7 @@ export default function LayoutSidebar({ collapsed, isDark }) {
           isDark ? 'border-gray-800' : 'border-border'
         )}
       />
-    </aside>
+      </aside>
+    </>
   )
 }

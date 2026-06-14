@@ -58,14 +58,14 @@ function FilterBar({ filters, activeFilters, onChange, isDark }) {
         const current = activeFilters[filter.key] ?? "";
 
         return (
-          <div key={filter.key} className="relative">
+          <div key={filter.key} className="relative w-full sm:w-auto">
             <select
               value={current}
               onChange={(e) => onChange(filter.key, e.target.value || null)}
               disabled={loading}
               className={cn(
                 "appearance-none pr-7 pl-3 py-2 rounded-md text-xs font-medium border-2 outline-none",
-                "transition-all duration-200 cursor-pointer min-w-[130px]",
+                "transition-all duration-200 cursor-pointer w-full min-w-[130px] sm:w-auto",
                 current
                   ? "border-primary text-primary bg-primary-50"
                   : isDark
@@ -268,10 +268,10 @@ export default function MasterList({ config, isDark, onEdit }) {
     <div className="space-y-4 relative z-10">
       {/* ── Toolbar ──────────────────────────────────────────────────────── */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           {/* Search */}
           {config.searchable !== false && (
-            <div className="relative flex-1 max-w-sm">
+            <div className="relative w-full flex-1 sm:max-w-sm">
               <Search
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -305,7 +305,7 @@ export default function MasterList({ config, isDark, onEdit }) {
             <button
               onClick={() => setFiltersOpen((v) => !v)}
               className={cn(
-                "flex items-center gap-2 px-3 py-2.5 rounded-md text-xs font-semibold border-2 transition-all duration-200",
+                "flex w-full items-center justify-center gap-2 px-3 py-2.5 rounded-md text-xs font-semibold border-2 transition-all duration-200 sm:w-auto",
                 filtersOpen || activeFilterCount > 0
                   ? "border-primary bg-primary-50 text-primary"
                   : isDark
@@ -327,14 +327,14 @@ export default function MasterList({ config, isDark, onEdit }) {
           {(activeFilterCount > 0 || search) && (
             <button
               onClick={clearFilters}
-              className="text-xs font-medium text-muted-foreground hover:text-destructive transition-colors"
+              className="text-xs font-medium text-muted-foreground hover:text-destructive transition-colors sm:whitespace-nowrap"
             >
               Clear all
             </button>
           )}
 
           {/* Meta count */}
-          <span className="ml-auto text-xs text-muted-foreground whitespace-nowrap">
+          <span className="text-xs text-muted-foreground whitespace-nowrap sm:ml-auto">
             {meta.total} {config.entityName ?? "records"}
             {meta.total !== 1 ? "s" : ""}
           </span>
@@ -371,7 +371,7 @@ export default function MasterList({ config, isDark, onEdit }) {
         {error && (
           <div
             className={cn(
-              "flex items-center gap-2 px-4 py-3 text-sm",
+              "flex items-start gap-2 px-3 py-3 text-sm sm:items-center sm:px-4",
               isDark ? "bg-red-950/40 text-red-400" : "bg-red-50 text-red-700",
             )}
           >
@@ -380,7 +380,7 @@ export default function MasterList({ config, isDark, onEdit }) {
         )}
 
         <div className="overflow-x-auto">
-          <table className={cn('data-table', isDark && 'data-table-dark')}>
+          <table className={cn('data-table min-w-[720px]', isDark && 'data-table-dark')}>
             <thead>
               <tr>
                 {columns.map((col) => (
@@ -481,11 +481,11 @@ export default function MasterList({ config, isDark, onEdit }) {
 
       {/* ── Pagination ───────────────────────────────────────────────────── */}
       {meta.pages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
             Page {meta.page} of {meta.pages}
           </p>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={meta.page <= 1 || loading}

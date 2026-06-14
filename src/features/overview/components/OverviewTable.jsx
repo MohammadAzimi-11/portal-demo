@@ -11,13 +11,13 @@ const OverviewTable = ({ data, onRefresh }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {data.map((item) => (
         <div key={item.class.id} className="bg-white rounded-lg shadow overflow-hidden">
           {/* Class Header */}
-          <div className="bg-gray-50 px-6 py-4 border-b">
-            <div className="flex justify-between items-center">
-              <div>
+          <div className="bg-gray-50 px-4 py-4 border-b sm:px-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
                 <h3 className="text-lg font-medium text-gray-900">
                   {item.class.cycle.name} - Class #{item.class.id}
                 </h3>
@@ -25,7 +25,7 @@ const OverviewTable = ({ data, onRefresh }) => {
                   {item.class.location.name} • {item.class.teacher.name} {item.class.teacher.lastname}
                 </p>
               </div>
-              <div className="text-right text-sm text-gray-600">
+              <div className="text-left text-sm text-gray-600 sm:text-right">
                 <p>{new Date(item.class.start_date).toLocaleDateString()} - {new Date(item.class.end_date).toLocaleDateString()}</p>
                 <p>{item.class.time_start} - {item.class.time_end}</p>
               </div>
@@ -34,7 +34,7 @@ const OverviewTable = ({ data, onRefresh }) => {
 
           {/* Subjects Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-[720px] divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

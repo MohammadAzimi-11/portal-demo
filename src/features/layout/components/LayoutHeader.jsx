@@ -9,6 +9,7 @@ import {
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
+  Menu,
 } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { timeAgo } from '../../../utils/utils'
@@ -59,8 +60,7 @@ const NOTIFICATION_TYPE_COLOR = {
 };
 
 // ── Subcomponent: Notification Dropdown ──────────────────────────────────────
-function NotificationDropdown({ isDark, onClose }) {
-  const navigate = useNavigate();
+function NotificationDropdown({ isDark }) {
   const [items, setItems] = useState(MOCK_NOTIFICATIONS);
   const unread = items.filter((n) => !n.is_read).length;
 
@@ -70,7 +70,7 @@ function NotificationDropdown({ isDark, onClose }) {
   return (
     <div
       className={cn(
-        "absolute right-0 top-full mt-2 w-80 rounded-lg border overflow-hidden z-[110] animate-slide-in-up",
+        "absolute right-[-3.25rem] top-full mt-2 w-[calc(100vw-1.5rem)] max-w-80 rounded-lg border overflow-hidden z-[110] animate-slide-in-up sm:right-0 sm:w-80",
         isDark ? "bg-gray-900 border-gray-700" : "bg-white border-border",
       )}
     >
@@ -200,6 +200,7 @@ function UserDropdown({ user, isDark, onClose }) {
     <div
       className={cn(
         "absolute right-0 top-full mt-2 w-56 rounded-lg border overflow-hidden z-[110] animate-slide-in-up",
+        "w-[calc(100vw-1.5rem)] max-w-56 sm:w-56",
         isDark ? "bg-gray-900 border-gray-700" : "bg-white border-border",
       )}
     >
@@ -283,6 +284,7 @@ function UserDropdown({ user, isDark, onClose }) {
 export default function LayoutHeader({
   collapsed,
   onToggle,
+  onMobileMenu,
   isDark,
   toggleTheme,
 }) {
@@ -316,15 +318,15 @@ export default function LayoutHeader({
   return (
     <header
       className={cn(
-        "fixed top-0 right-0 z-[100] h-16 flex items-center px-4 gap-3 border-b transition-all duration-300",
+        "fixed top-0 right-0 left-0 z-[100] h-16 flex items-center px-3 gap-2 border-b transition-all duration-300 sm:px-4 sm:gap-3",
         isDark ? "bg-gray-900 border-gray-800" : "bg-white border-border",
-        collapsed ? "left-16" : "left-[240px]",
+        collapsed ? "lg:left-16" : "lg:left-[240px]",
       )}
     >
       {/* ── Sidebar collapse toggle ─────────────────────────────────────── */}
       <button
         onClick={onToggle}
-        className={iconBtn}
+        className={cn(iconBtn, "hidden lg:flex")}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? (
@@ -332,6 +334,14 @@ export default function LayoutHeader({
         ) : (
           <PanelLeftClose size={18} strokeWidth={2} />
         )}
+      </button>
+
+      <button
+        onClick={onMobileMenu}
+        className={cn(iconBtn, "lg:hidden")}
+        aria-label="Open navigation"
+      >
+        <Menu size={18} strokeWidth={2} />
       </button>
 
       {/* ── Spacer ──────────────────────────────────────────────────────── */}
@@ -373,7 +383,6 @@ export default function LayoutHeader({
         {notifOpen && (
           <NotificationDropdown
             isDark={isDark}
-            onClose={() => setNotifOpen(false)}
           />
         )}
       </div>
@@ -386,7 +395,7 @@ export default function LayoutHeader({
             setNotifOpen(false);
           }}
           className={cn(
-            "flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-md transition-all duration-200 cursor-pointer",
+            "flex items-center gap-2 pl-1.5 pr-2 py-1.5 rounded-md transition-all duration-200 cursor-pointer sm:gap-2.5 sm:pl-2 sm:pr-3",
             isDark ? "hover:bg-gray-800" : "hover:bg-muted",
             profileOpen && (isDark ? "bg-gray-800" : "bg-muted"),
           )}
@@ -407,7 +416,6 @@ export default function LayoutHeader({
                   .slice(0, 2)
                   .map((p) => p[0])
                   .join("")}
-                {MOCK_USER.name.split(' ').slice(0, 2).map((p) => p[0]).join('')}
               </span>
             </div>
           )}

@@ -482,9 +482,9 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
 
       {/* Actions */}
       <div className={cn(
-        'flex items-center gap-3 pt-4 border-t',
+        'flex flex-col-reverse items-stretch gap-3 pt-4 border-t sm:flex-row sm:items-center',
         isDark ? 'border-gray-800' : 'border-border',
-        mode === 'edit' ? 'justify-between' : 'justify-end'
+        mode === 'edit' ? 'sm:justify-between' : 'sm:justify-end'
       )}>
         {/* Delete — edit mode only */}
         {mode === 'edit' && config.allowDelete !== false && (
@@ -493,7 +493,7 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
             onClick={handleDelete}
             disabled={deleting || saving}
             className={cn(
-              'flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all duration-200',
+              'flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all duration-200',
               confirmDelete
                 ? 'bg-destructive text-white hover:bg-red-700'
                 : isDark
@@ -531,6 +531,7 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
           disabled={saving || deleting}
           className={cn(
             'flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold text-white',
+            'justify-center',
             'bg-primary hover:bg-primary-600 transition-all duration-200 hover:scale-[1.02]',
             (saving || deleting) && 'opacity-50 cursor-not-allowed'
           )}

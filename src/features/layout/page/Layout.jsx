@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { cn } from '../../../utils/utils'
 import { useThemeStore } from '../../shared/store/useThemeStore'
 import LayoutSidebar from '../components/LayoutSidebar'
@@ -33,6 +33,7 @@ const useSidebarStore = create(
 export default function Layout({ children }) {
   const { isDark, toggleTheme, initTheme } = useThemeStore()
   const { collapsed, toggle } = useSidebarStore()
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   // Sync HTML class on first mount
   useEffect(() => {
@@ -47,12 +48,19 @@ export default function Layout({ children }) {
       )}
     >
       {/* ── Sidebar ────────────────────────────────────────────────────── */}
-      <LayoutSidebar collapsed={collapsed} isDark={isDark} />
+      <LayoutSidebar
+        collapsed={collapsed}
+        isDark={isDark}
+        mobileOpen={mobileSidebarOpen}
+        onClose={() => setMobileSidebarOpen(false)}
+        onNavigate={() => setMobileSidebarOpen(false)}
+      />
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <LayoutHeader
         collapsed={collapsed}
         onToggle={toggle}
+        onMobileMenu={() => setMobileSidebarOpen(true)}
         isDark={isDark}
         toggleTheme={toggleTheme}
       />
@@ -61,13 +69,13 @@ export default function Layout({ children }) {
       <main
         className={cn(
           'transition-all duration-300 pt-16', // offset for fixed header
-          collapsed ? 'pl-16' : 'pl-[240px]'   // offset for fixed sidebar
+          collapsed ? 'lg:pl-16' : 'lg:pl-[240px]'   // offset for fixed sidebar
         )}
       >
         {/* Inner content wrapper */}
         <div
           className={cn(
-            'min-h-[calc(100vh-4rem)] p-6',
+            'min-h-[calc(100vh-4rem)] px-3 py-4 sm:px-4 sm:py-5 lg:p-6',
             isDark ? 'text-gray-100' : 'text-foreground'
           )}
         >

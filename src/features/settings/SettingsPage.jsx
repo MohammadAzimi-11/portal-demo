@@ -58,7 +58,7 @@ function Section({ title, subtitle, icon: Icon, children, isDark, accent = 'prim
     return (
         <div className={cn('rounded-lg border', isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border')}>
             {/* Section header */}
-            <div className={cn('flex items-center gap-4 px-6 py-5 border-b', isDark ? 'border-gray-800' : 'border-border')}>
+            <div className={cn('flex items-center gap-3 px-4 py-4 border-b sm:gap-4 sm:px-6 sm:py-5', isDark ? 'border-gray-800' : 'border-border')}>
                 <div className={cn('flex items-center justify-center w-10 h-10 rounded-lg shrink-0', accentMap[accent])}>
                     <Icon size={18} strokeWidth={2.5} />
                 </div>
@@ -71,7 +71,7 @@ function Section({ title, subtitle, icon: Icon, children, isDark, accent = 'prim
                     )}
                 </div>
             </div>
-            <div className="p-6">{children}</div>
+            <div className="p-4 sm:p-6">{children}</div>
         </div>
     )
 }
@@ -983,21 +983,21 @@ export default function SettingsPage() {
     return (
         <div className="animate-scale-in">
             {/* ── Page header ─────────────────────────────────────────────── */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
                 <h2 className={cn('text-2xl font-extrabold tracking-tight', isDark ? 'text-white' : 'text-foreground')}>
                     Settings
                 </h2>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1 max-w-3xl">
                     Manage academy configuration, roles, permissions, and data exports.
                 </p>
             </div>
 
             {/* ── Two-column layout: left nav + right content ─────────────── */}
-            <div className="flex gap-6 items-start">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
 
                 {/* ── Left vertical tab nav ─────────────────────────────────── */}
                 <nav className={cn(
-                    'w-52 shrink-0 rounded-lg border overflow-hidden sticky top-20',
+                    'flex w-full gap-1 overflow-x-auto rounded-lg border p-1 lg:sticky lg:top-20 lg:block lg:w-52 lg:shrink-0 lg:overflow-hidden lg:p-0',
                     isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border'
                 )}>
                     {TABS.map((t) => {
@@ -1008,13 +1008,13 @@ export default function SettingsPage() {
                                 key={t.id}
                                 onClick={() => setActiveTab(t.id)}
                                 className={cn(
-                                    'w-full flex items-center gap-3 px-4 py-3 text-sm font-medium',
-                                    'transition-all duration-150 text-left border-b last:border-b-0',
+                                    'flex shrink-0 items-center gap-2 px-3 py-2.5 text-sm font-medium lg:w-full lg:gap-3 lg:px-4 lg:py-3',
+                                    'transition-all duration-150 text-left rounded-md border-b-0 lg:rounded-none lg:border-b lg:last:border-b-0',
                                     isDark ? 'border-gray-800' : 'border-border',
                                     isActive
                                         ? isDark
-                                            ? 'bg-primary/15 text-primary-300 border-l-4 border-l-primary pl-3'
-                                            : 'bg-primary-50 text-primary-700 border-l-4 border-l-primary pl-3'
+                                            ? 'bg-primary/15 text-primary-300 lg:border-l-4 lg:border-l-primary lg:pl-3'
+                                            : 'bg-primary-50 text-primary-700 lg:border-l-4 lg:border-l-primary lg:pl-3'
                                         : isDark
                                             ? 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
                                             : 'text-gray-600 hover:bg-muted hover:text-foreground'
@@ -1025,7 +1025,7 @@ export default function SettingsPage() {
                                     strokeWidth={isActive ? 2.5 : 2}
                                     className={isActive ? (isDark ? 'text-primary-300' : 'text-primary-600') : ''}
                                 />
-                                {t.label}
+                                <span className="whitespace-nowrap">{t.label}</span>
                             </button>
                         )
                     })}
